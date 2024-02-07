@@ -47,7 +47,7 @@ module.exports = {
 
       const updatedCard = await Card.findByIdAndUpdate(
         cardId,
-        { $addToSet: { likes: userId } }, // Adiciona userId ao array se ele não estiver lá
+        { $addToSet: { likes: userId } },
         { new: true },
       );
 
@@ -68,7 +68,7 @@ module.exports = {
 
       const updatedCard = await Card.findByIdAndUpdate(
         cardId,
-        { $pull: { likes: userId } }, // Remove userId do array
+        { $pull: { likes: userId } },
         { new: true },
       );
 
