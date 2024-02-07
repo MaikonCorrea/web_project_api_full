@@ -7,23 +7,24 @@ module.exports = {
     return users;
   },
   createUser: async (body) => {
-    const { name, about, avatar } = body;
-    const urlRegex = /^https?:\/\/[^\s]+$/;
-    const isAvatarValid = avatar.match(urlRegex);
-    if (!isAvatarValid) {
-      throw new CustomError(
-        'link do Avatar é inválido!',
-        'InvalidLinkError',
-        400,
-      );
-    }
+    const {
+      email,
+      name,
+      about,
+      avatar,
+    } = body;
 
-    const newUser = new User({ name, about, avatar });
+    const newUser = new User({
+      email,
+      name,
+      about,
+      avatar,
+    });
     try {
       const savedUser = await newUser.save();
       return savedUser;
     } catch (error) {
-      if (error instanceof CustomError) {
+      if (error.name === 'ValidationError') {
         const field = Object.keys(error.errors)[0];
         const { message } = error.errors[field];
         throw new CustomError(message, 'ValidationError', 400);
@@ -46,7 +47,7 @@ module.exports = {
       }
       throw new CustomError('Nenhum dado válido fornecido para atualização!', 'InvalidDataError', 400);
     } catch (error) {
-      if (Object.keys(error.errors).length > 0) {
+      if (error.name === 'ValidationError') {
         const field = Object.keys(error.errors)[0];
         const { message } = error.errors[field];
         throw new CustomError(message, 'ValidationError', 400);
@@ -56,20 +57,20 @@ module.exports = {
   },
 
   updateUserAvatar: async (userId, updatedData) => {
-    const existingUser = await User.findById(userId);
     try {
-      if ('avatar' in updatedData) {
-        const urlRegex = /^https?:\/\/[^\s]+$/;
-        const isAvatarValid = updatedData.avatar === '' || updatedData.avatar.match(urlRegex);
-        if (!isAvatarValid) {
-          throw new CustomError('Link do Avatar é inválido!', 'InvalidLinkError', 400);
-        }
-        existingUser.avatar = updatedData.avatar;
+      const existingUser = await User.findById(userId);
+      if (!existingUser) {
+        throw new CustomError('Usuário não encontrado', 'NotFoundError', 404);
       }
-      const updateAvatar = await existingUser.save();
-      return updateAvatar;
+      if ('avatar' in updatedData) {
+        const { avatar } = updatedData;
+        existingUser.avatar = avatar;
+      }
+      await existingUser.validate();
+      const updatedUser = await existingUser.save();
+      return updatedUser;
     } catch (error) {
-      if (error.avatar instanceof CustomError) {
+      if (error.name === 'ValidationError') {
         const field = Object.keys(error.errors)[0];
         const { message } = error.errors[field];
         throw new CustomError(message, 'ValidationError', 400);
