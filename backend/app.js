@@ -1,6 +1,8 @@
 const express = require('express');
-const usersRouter = require('./routes/users');
+
 const cardsRouter = require('./routes/cards');
+const login = require('./controllers/users');
+const createUser = require('./controllers/users');
 
 const { PORT = 3000 } = process.env;
 const connectDatabase = require('./data/database');
@@ -17,8 +19,9 @@ const authMiddleware = async (req, res, next) => {
 
 app.use(authMiddleware);
 
-app.use('/users', usersRouter);
 app.use('/cards', cardsRouter);
+app.post('/signin', login);
+app.post('/signup', createUser);
 
 app.use('/', (req, res, next) => {
   res.status(404).json({ message: 'A solicitação não foi encontrada mesmo', status: 404 });
