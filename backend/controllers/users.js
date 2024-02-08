@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const CustomError = require('../errors/CustomError');
+const bcrypt = require('../node_modules/bcrypt');
 
 module.exports = {
   listUsers: async () => {
@@ -9,13 +10,17 @@ module.exports = {
   createUser: async (body) => {
     const {
       email,
+      password,
       name,
       about,
       avatar,
     } = body;
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({
       email,
+      password: hashedPassword,
       name,
       about,
       avatar,
@@ -76,6 +81,23 @@ module.exports = {
         throw new CustomError(message, 'ValidationError', 400);
       }
       throw error;
+    }
+  },
+
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await User.findOne({ email });
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!user) {
+        throw new Error('E-mail ou senha incorretos');
+      }
+      if (!passwordMatch) {
+        throw new CustomError('Senha incorreta', 'AuthenticationError', 401);
+      }
+      res.status(200).send({ message: 'Login bem-sucedido' });
+    } catch (err) {
+      res.status(401).send({ message: err.message });
     }
   },
 };
