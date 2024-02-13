@@ -1,6 +1,6 @@
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const CustomError = require('../errors/CustomError');
-const bcrypt = require('../node_modules/bcrypt');
 
 module.exports = {
   listUsers: async () => {
@@ -66,8 +66,7 @@ module.exports = {
       const existingUser = await User.findById(userId);
       if (!existingUser) {
         throw new CustomError('Usuário não encontrado', 'NotFoundError', 404);
-      }
-      if ('avatar' in updatedData) {
+      } if ('avatar' in updatedData) {
         const { avatar } = updatedData;
         existingUser.avatar = avatar;
       }
