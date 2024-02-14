@@ -5,7 +5,7 @@ const {
 } = require('../controllers/cards');
 const CustomError = require('../errors/CustomError');
 
-router.get('/', async (req, res, next) => {
+router.get('/cards', async (req, res, next) => {
   try {
     const cards = await listCards();
     res.json(cards);
