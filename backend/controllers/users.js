@@ -1,13 +1,12 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
+const { createHash } = require('../utils/hash');
+
 const CustomError = require('../errors/CustomError');
 
 module.exports = {
-  listUsers: async () => {
-    const users = await User.find();
-    return users;
-  },
-  createUser: async (body) => {
+  createUser: async (req, res) => {
+    const { body } = req;
     const {
       email,
       password,
@@ -15,9 +14,7 @@ module.exports = {
       about,
       avatar,
     } = body;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
+    const hashedPassword = createHash(password);
     const newUser = new User({
       email,
       password: hashedPassword,
@@ -26,16 +23,18 @@ module.exports = {
       avatar,
     });
     try {
-      const savedUser = await newUser.save();
-      return savedUser;
+      const user = await newUser.save();
+      // Retorna uma resposta de sucesso com o novo usuário
+      res.status(201).json({ success: true, user });
     } catch (error) {
-      if (error.name === 'ValidationError') {
-        const field = Object.keys(error.errors)[0];
-        const { message } = error.errors[field];
-        throw new CustomError(message, 'ValidationError', 400);
-      }
-      throw error;
+      // Em caso de erro, envie uma resposta de erro
+      res.status(500).json({ success: false, message: 'Failed to create user', error: error.message });
     }
+  },
+
+  listUsers: async () => {
+    const users = await User.find();
+    return users;
   },
 
   updateProfile: async (userId, updatedData) => {
@@ -87,16 +86,19 @@ module.exports = {
     try {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
-      const passwordMatch = await bcrypt.compare(password, user.password);
-      if (!user) {
-        throw new Error('E-mail ou senha incorretos');
+
+      if (!user) { // Verifica se o usuário foi encontrado
+        throw new CustomError('E-mail ou senha incorretos', 'NotFoundError', 404);
       }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
       if (!passwordMatch) {
         throw new CustomError('Senha incorreta', 'AuthenticationError', 401);
       }
       res.status(200).send({ message: 'Login bem-sucedido' });
     } catch (err) {
-      res.status(401).send({ message: err.message });
+      res.status(err.status || 401).send({ message: err.message });
     }
   },
 };
