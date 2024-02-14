@@ -1,9 +1,11 @@
-const jwt = require('jsonwebtoken');
-
+/* const jwt = require('jsonwebtoken');
+const { validateHash } = require('../utils/hash');
+ */
 module.exports = (req, res, next) => {
-  const { authorization } = req.headers;
+  const headers = req.headers;
+  console.log(headers)
 
-  if (!authorization || !authorization.startsWith('Bearer ')) {
+/*   if (!authorization || !authorization.startsWith('Bearer ')) {
     return res
       .status(401)
       .send({ message: 'Autorização necessária' });
@@ -20,7 +22,7 @@ module.exports = (req, res, next) => {
       .send({ message: 'Autorização necessária' });
   }
 
-  req.user = payload;
+  req.user = payload; */
 
   next();
 };
