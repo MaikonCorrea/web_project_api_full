@@ -13,16 +13,16 @@ const connectDatabase = require('./data/database');
 const app = express();
 connectDatabase();
 
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(auth);
+
 app.post('/signin', login); // em andamento
 app.post('/signup', createUser); // funcionando
 
+app.use(auth);
 app.get('/cards', cardsRouter); // funcionando
 
 app.patch('/users/me', updateProfile); // precisa fazer ainda
-
-
 
 app.use('/', (req, res, next) => {
   res.status(404).json({ message: 'A solicitação não foi encontrada mesmo', status: 404 });
