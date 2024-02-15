@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { createHash } = require('../utils/hash');
 
@@ -24,10 +24,8 @@ module.exports = {
     });
     try {
       const user = await newUser.save();
-      // Retorna uma resposta de sucesso com o novo usuário
       res.status(201).json({ success: true, user });
     } catch (error) {
-      // Em caso de erro, envie uma resposta de erro
       res.status(500).json({ success: false, message: 'Failed to create user', error: error.message });
     }
   },
@@ -82,23 +80,15 @@ module.exports = {
     }
   },
 
-  login: async (req, res) => {
-    try {
-      const { email, password } = req.body;
-      const user = await User.findOne({ email });
-
-      if (!user) { // Verifica se o usuário foi encontrado
-        throw new CustomError('E-mail ou senha incorretos', 'NotFoundError', 404);
-      }
-
-      const passwordMatch = await bcrypt.compare(password, user.password);
-
-      if (!passwordMatch) {
-        throw new CustomError('Senha incorreta', 'AuthenticationError', 401);
-      }
-      res.status(200).send({ message: 'Login bem-sucedido' });
-    } catch (err) {
-      res.status(err.status || 401).send({ message: err.message });
-    }
+  login: (req, res) => {
+    const { email, password } = req.body;
+    User.findUserByCredentials(email, password)
+      .then((user) => {
+        const token = jwt.sign({ _id: user._id }, 'chave-secreta', { expiresIn: '7d' });
+        res.send({ token });
+      })
+      .catch((err) => {
+        res.status(401).send({ message: err.message });
+      });
   },
 };
