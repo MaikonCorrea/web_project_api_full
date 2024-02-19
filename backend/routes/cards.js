@@ -14,21 +14,8 @@ router.get('/cards', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res) => {
-  const { body } = req;
-  try {
-    const newCard = await createCard(body, req);
-    res.status(200).json(newCard);
-  } catch (error) {
-    res
-      .status(error.statusCode)
-      .json({
-        message: error.message,
-        type: error.name,
-        Status: error.statusCode,
-      });
-  }
-});
+router.post('/card', createCard);
+
 
 router.delete('/:id', async (req, res) => {
   const cardId = req.params.id;
@@ -80,5 +67,7 @@ router.delete('/:cardId/likes', async (req, res) => {
       });
   }
 });
+
+
 
 module.exports = router;
