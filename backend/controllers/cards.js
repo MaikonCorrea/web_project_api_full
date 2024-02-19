@@ -2,17 +2,12 @@ const Card = require('../models/card');
 const CustomError = require('../errors/CustomError');
 
 module.exports = {
-  listCards: async () => {
-    const cards = await Card.find();
-    return cards;
-  },
-
-  createCard: async (body, req) => {
-    const { name, link } = body;
-    const linkRegex = /^https?:\/\/[^\s]+$/;
-    const isLinkValid = link.match(linkRegex);
-    if (!isLinkValid) {
-      throw new CustomError('Link de imagem inválido!', 'InvalidLinkError', 400);
+  createCard: async (req, res) => {
+    const {name, link} = req.body;
+    const linkRegex = /^(https?:\/\/)[^\s/$.?#].[^\s]*$/;
+    const isValidLink = link.match(linkRegex);
+    if (!isValidLink) {
+      throw new CustomError (errors.message ,'ValidationError', 400);
     }
     const owner = req.user._id;
     const newCard = new Card({
@@ -21,18 +16,22 @@ module.exports = {
       owner,
       createdAt: new Date(),
     });
+
     try {
       const saveCard = await newCard.save();
-      return saveCard;
+      res.status(201).json(saveCard);
     } catch (error) {
       if (error instanceof CustomError) {
-        const field = Object.keys(error.errors)[0];
-        const { message } = error.errors[field].message;
-        throw new CustomError(message, 'ValidationError', 400);
+        throw new CustomError(error.message, 'ValidationError', 400);
       } else {
         throw error;
       }
     }
+  },
+
+  listCards: async () => {
+    const cards = await Card.find();
+    return cards;
   },
 
   deleteCard: async (id) => {
