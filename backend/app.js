@@ -1,9 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 
 const cardsRouter = require('./routes/cards');
+const usersRouter = require('./routes/users');
 const {
-  login, createUser, updateProfile,
+  login, createUser,
 } = require('./controllers/users');
 const auth = require('./middleware/auth');
 
@@ -16,16 +18,15 @@ connectDatabase();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.post('/signin', login); // em andamento
-app.post('/signup', createUser); // funcionando
+app.post('/signin', login);
+app.post('/signup', createUser);
 
 app.use(auth);
-app.get('/cards', cardsRouter); // funcionando
-
-app.patch('/users/me', updateProfile); // precisa fazer ainda
+app.use('/', cardsRouter);
+app.use('/', usersRouter)
 
 app.use('/', (req, res, next) => {
-  res.status(404).json({ message: 'A solicitação não foi encontrada mesmo', status: 404 });
+  res.status(404).json({ message: 'A solicitação não foi encontrada', status: 404 });
   next();
 });
 
