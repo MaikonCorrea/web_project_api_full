@@ -1,10 +1,12 @@
-const jwt = require('jsonwebtoken');
+const jwtSecret = process.env.JWT_SECRET;
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 const { createHash } = require('../utils/hash');
 
 const CustomError = require('../errors/CustomError');
 
 module.exports = {
+
   createUser: async (req, res) => {
     const { body } = req;
     const {
@@ -84,7 +86,8 @@ module.exports = {
     const { email, password } = req.body;
     User.findUserByCredentials(email, password)
       .then((user) => {
-        const token = jwt.sign({ _id: user._id }, 'chave-secreta', { expiresIn: '7d' });
+        console.log(user._id)
+        const token = jwt.sign({ _id: user._id }, jwtSecret, { expiresIn: '7d' });
         res.send({ token });
       })
       .catch((err) => {
