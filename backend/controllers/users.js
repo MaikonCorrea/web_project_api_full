@@ -41,12 +41,16 @@ module.exports = {
     try {
       const { user } = req;
       const id = user._id;
-      const userData = await User.findById(id).select('name about email');
+      const userData = await User.findById(id).select('name about email avatar');
       if (!userData) {
         return res.status(404).json({ message: 'Usuário não encontrado' });
       }
-      const { name, about, email } = userData;
-      res.json({ name, about, email });
+      const {
+        name, about, email, avatar,
+      } = userData;
+      res.json({
+        name, about, email, avatar,
+      });
     } catch (error) {
       res.status(500).json({ message: 'Ocorreu um erro ao processar a solicitação' });
     }
