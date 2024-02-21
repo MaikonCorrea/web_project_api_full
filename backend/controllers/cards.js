@@ -3,11 +3,11 @@ const CustomError = require('../errors/CustomError');
 
 module.exports = {
   createCard: async (req, res) => {
-    const {name, link} = req.body;
+    const { name, link } = req.body;
     const linkRegex = /^(https?:\/\/)[^\s/$.?#].[^\s]*$/;
     const isValidLink = link.match(linkRegex);
     if (!isValidLink) {
-      throw new CustomError (errors.message ,'ValidationError', 400);
+      throw new CustomError(errors.message, 'ValidationError', 400);
     }
     const owner = req.user._id;
     const newCard = new Card({

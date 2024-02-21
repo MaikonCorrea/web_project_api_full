@@ -16,7 +16,6 @@ router.get('/cards', async (req, res, next) => {
 
 router.post('/card', createCard);
 
-
 router.delete('/:id', async (req, res) => {
   const cardId = req.params.id;
 
@@ -67,7 +66,5 @@ router.delete('/:cardId/likes', async (req, res) => {
       });
   }
 });
-
-
 
 module.exports = router;

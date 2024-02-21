@@ -1,14 +1,15 @@
 const router = require('express').Router();
+const User = require('../models/user');
 
 const {
   listUsers, createUser, updateProfile, updateUserAvatar,
+  userMe,
 } = require('../controllers/users');
 const CustomError = require('../errors/CustomError');
 
-router.get('/users', async (req, res) => {
-  const users = await listUsers();
-  res.json(users);
-});
+router.get('/users', listUsers);
+
+router.get('/users/me', userMe);
 
 router.get('/:id', async (req, res) => {
   try {

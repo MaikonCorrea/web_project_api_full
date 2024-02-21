@@ -23,7 +23,7 @@ app.post('/signup', createUser);
 
 app.use(auth);
 app.use('/', cardsRouter);
-app.use('/', usersRouter)
+app.use('/', usersRouter);
 
 app.use('/', (req, res, next) => {
   res.status(404).json({ message: 'A solicitação não foi encontrada', status: 404 });

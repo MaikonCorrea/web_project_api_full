@@ -1,6 +1,6 @@
 const jwtSecret = process.env.JWT_SECRET;
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
 const { createHash } = require('../utils/hash');
 
 const CustomError = require('../errors/CustomError');
@@ -35,6 +35,21 @@ module.exports = {
   listUsers: async () => {
     const users = await User.find();
     return users;
+  },
+
+  userMe: async (req, res) => {
+    try {
+      const { user } = req;
+      const id = user._id;
+      const userData = await User.findById(id).select('name about email');
+      if (!userData) {
+        return res.status(404).json({ message: 'Usuário não encontrado' });
+      }
+      const { name, about, email } = userData;
+      res.json({ name, about, email });
+    } catch (error) {
+      res.status(500).json({ message: 'Ocorreu um erro ao processar a solicitação' });
+    }
   },
 
   updateProfile: async (userId, updatedData) => {
@@ -86,7 +101,6 @@ module.exports = {
     const { email, password } = req.body;
     User.findUserByCredentials(email, password)
       .then((user) => {
-        console.log(user._id)
         const token = jwt.sign({ _id: user._id }, jwtSecret, { expiresIn: '7d' });
         res.send({ token });
       })

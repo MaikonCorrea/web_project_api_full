@@ -1,3 +1,4 @@
+const jwtSecret = process.env.JWT_SECRET;
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
@@ -5,15 +6,14 @@ module.exports = (req, res, next) => {
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return res
-      .status(403)
-      .send({ message: 'Autorização necessária' });
+      .status(401)
+      .send({ message: 'token não confere' });
   }
 
   const token = authorization.replace('Bearer ', '');
   let payload;
-
   try {
-    payload = jwt.verify(token, 'some-secret-key');
+    payload = jwt.verify(token, jwtSecret);
   } catch (err) {
     return res
       .status(401)
