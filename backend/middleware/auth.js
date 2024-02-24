@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return res
-      .status(401)
+      .status(403)
       .send({ message: 'token não confere' });
   }
 
@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, jwtSecret);
   } catch (err) {
     return res
-      .status(401)
+      .status(403)
       .send({ message: 'Autorização necessária' });
   }
 

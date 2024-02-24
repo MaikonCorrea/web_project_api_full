@@ -32,9 +32,9 @@ module.exports = {
     }
   },
 
-  listUsers: async () => {
+  listUsers: async (req, res) => {
     const users = await User.find();
-    return users;
+    res.status(200).json({ users });
   },
 
   userMe: async (req, res) => {
@@ -48,11 +48,11 @@ module.exports = {
       const {
         name, about, email, avatar,
       } = userData;
-      res.json({
+      return res.status(201).json({
         name, about, email, avatar,
       });
     } catch (error) {
-      res.status(500).json({ message: 'Ocorreu um erro ao processar a solicitação' });
+      return res.status(500).json({ message: 'Ocorreu um erro ao processar a solicitação' });
     }
   },
 

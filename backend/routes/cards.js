@@ -3,7 +3,6 @@ const router = require('express').Router();
 const {
   listCards, createCard, deleteCard, likeCard, unlikeCard,
 } = require('../controllers/cards');
-const CustomError = require('../errors/CustomError');
 
 router.get('/cards', async (req, res, next) => {
   try {
@@ -14,28 +13,28 @@ router.get('/cards', async (req, res, next) => {
   }
 });
 
-router.post('/card', createCard);
+router.post('/cards', createCard);
 
 router.delete('/:id', async (req, res) => {
-  const cardId = req.params.id;
-
   try {
-    const cards = await listCards();
-    const cardExists = cards.some((card) => card.id === cardId);
+    const idUser = req.user._id;
+    const idCardDelete = req.params.id;
 
-    if (!cardExists) {
-      throw new CustomError('Card não encontrado!', 'CardNotFoundError', 404);
+    const cards = await listCards();
+
+    const cardToDelete = cards.find((card) => card._id.toString() === idCardDelete);
+
+    if (!cardToDelete) {
+      return res.status(404).json({ message: 'Cartão não encontrado' });
     }
-    const deletedCard = await deleteCard(cardId);
-    res.status(204).send(deletedCard);
+
+    if (cardToDelete.owner.toString() !== idUser) {
+      return res.status(403).json({ message: 'Você não tem permissão para excluir este cartão' });
+    }
+    deleteCard(idCardDelete);
+    res.status(200).json({ message: 'Cartão excluído com sucesso' });
   } catch (error) {
-    res
-      .status(error.statusCode)
-      .json({
-        message: error.message,
-        type: error.name,
-        Status: error.statusCode,
-      });
+    res.status(500).json({ message: 'Erro ao encontrar o cartão' });
   }
 });
 
