@@ -1,6 +1,7 @@
 {
   "extends": "airbnb-base",
   "rules": {
+    "consistent-return": 0,
     "semi": ["error", "always"],
     "quotes": ["error", "single"],
     "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
