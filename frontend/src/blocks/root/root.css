@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 1280px;
+  width: 100%;
+  max-height: 100vh;
+  font-family: "Inter", sans-serif;
+  background-color: #000000;
+  margin: auto;
+}
+
+@media screen and ( max-width: 768px) {
+  body {
+    max-width: 733px;
+    }
+}
+
+
+@media screen and ( max-width: 588px) {
+  body {
+    max-width: 578px;
+    }
+}

@@ -1,0 +1,131 @@
+.photograph {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.photograph__popup-title {
+  width: 358px;
+  height: 23px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  margin-bottom: 24px;
+  margin-top: 34px;
+  color: #000000;
+}
+
+.photograph__popup {
+  position: sticky;
+  width: 430px;
+  height: 272px;
+  margin: auto;
+  top: 195px;
+  background: #ffffff;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.photograph__input-link {
+  border: none;
+  width: 358px;
+  height: 24px;
+  border-bottom: 1px solid #bcbcc4;
+  background-color: transparent;
+  margin-top: 30px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+
+.photograph__button-save_disabled {
+  color: black;
+  opacity: 0.2;
+  cursor: default;
+  background-color: rgba(240, 248, 255, 0);
+  border: 1px solid #000000;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.photograph__button-save {
+  width: 358px;
+  height: 50.15px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  color: #ffffff;
+  background: #000000;
+  border-radius: 2px;
+  margin-top: 48px;
+  margin-bottom: 36.51px;
+  cursor: pointer;
+  border: none;
+}
+
+.photograph__button-save:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.photograph__button-close-popup {
+  position: absolute;
+  right: -47px;
+  top: -47px;
+  background: url(../../images/Close_Icon.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+}
+
+.photograph__button-close-popup:hover {
+  opacity: 0.8;
+  border-radius: 2px;
+}
+
+@media screen and (max-width: 588px) {
+  .photograph__popup-title {
+    width: 238px;
+    height: 22px;
+    font-size: 18px;
+    line-height: 22px;
+    margin-top: 25px;
+    margin-bottom: 76px;
+  }
+  .photograph__popup {
+    width: 282px;
+    height: 322px;
+  }
+  .photograph__input-link {
+    width: 238px;
+    height: 17px;
+  }
+  .photograph__button-save {
+    width: 238px;
+    height: 46px;
+    font-size: 14px;
+    line-height: 17px;
+    margin-top: 46px;
+    margin-bottom: 25px;
+  }
+  .photograph__button-close-popup {
+    width: 26px;
+    height: 26px;
+    right: 0px;
+    top: -39.62px;
+  }
+}

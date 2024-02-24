@@ -1,0 +1,123 @@
+.login {
+  width: 358px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 60px;
+  text-align: center;
+  align-items: center;
+}
+
+.login__title {
+  width: 358px;
+  line-height: 29.05px;
+  color: white;
+}
+
+.login__input-email,
+.login__input-password {
+  border: none;
+  width: 358px;
+  height: 24px;
+  margin-top: 50px;
+  border-bottom: 1px solid #bcbcc4;
+  background-color: transparent;
+  color: #ccc;
+  font-size: 14px;
+  outline: none;
+}
+.login__input-password {
+  margin-top: 30px;
+}
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: #ffffff;
+  -webkit-box-shadow: 0 0 0px 1000px black inset;
+}
+
+.login__button-confirm {
+  width: 358px;
+  height: 50.15px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  color: rgba(0, 0, 0, 1);
+  background: rgba(255, 255, 255, 1);
+  border-radius: 2px;
+  margin-top: 216px;
+  cursor: pointer;
+  border: none;
+}
+
+.login__button-confirm:hover {
+  background: rgba(255, 255, 255, 0.548);
+}
+
+.login__button-confim--disabled {
+  opacity: 0.2;
+  cursor: default;
+  pointer-events: none;
+}
+
+.login__signup {
+  display: flex;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 15px;
+ 
+}
+
+.signup__link {
+  margin-left: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.signup__link:hover {
+ color: rgba(255, 255, 255, 0.548);
+}
+
+@media screen and (max-width: 588px) {
+  .login {
+    margin-top: 40px;
+    width: 320px;
+  }
+
+  .login__button-confirm {
+    width: 238px;
+    height: 46px;
+    font-size: 14px;
+    line-height: 17px;
+    margin-top: 46px;
+    margin-bottom: 25px;
+  }
+}
+
+@media screen and (max-width: 588px) {
+  .login {
+    align-items: center;
+  }
+
+  .login__input-email,
+  .login__input-password {
+    width: 260px;
+    height: 27px;
+    margin-top: 40px;
+  }
+
+  .login__button-confirm {
+   margin-bottom: 0;
+   margin-top: 172px;
+  }
+  .login__signup {
+    margin-top: 20px;
+  }
+}

@@ -1,0 +1,42 @@
+/* vendor */
+@import url(./vendor/normalize.css);
+/* fonts */
+@import url(./fonts/font.css);
+/* fadeOut */
+@import url(./blocks/fadeOut/fadeOut.css);
+/* root */
+@import url(./blocks/root/root.css);
+/* header */
+@import url(./blocks/header/header.css);
+/* profile */
+@import url(./blocks/profile/profile.css);
+/* edit */
+@import url(./blocks/edit/edit.css);
+/* photograph */
+@import url(./blocks/photograph/photograph.css);
+/* delete */
+@import url(./blocks/delete/delete.css);
+/* include */
+@import url(./blocks/include/include.css);
+/* popup */
+@import url(./blocks/popup/_opened/popup_opened.css);
+@import url(./blocks/popup/_closing/popup_closing.css);
+/* gallery */
+@import url(./blocks/gallery/gallery.css);
+/* screen */
+@import url(./blocks/screen/screen.css);
+/* place */
+@import url(./blocks/place/place.css);
+/* footer */
+@import url(./blocks/footer/footer.css);
+/* span */
+@import url(./blocks/span/span.css);
+/* loading */
+@import url(./blocks/loading/loading.css);
+/* login */
+@import url(./blocks/login/login.css);
+/*  register */
+@import url(./blocks/register/register.css);
+/* info */
+@import url(./blocks/info/info.css);
+

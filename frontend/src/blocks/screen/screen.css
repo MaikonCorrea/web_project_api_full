@@ -1,0 +1,79 @@
+.screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.screen__popup-title {
+  width: 291px;
+  height: 12px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  position: relative;
+  color: #ffffff;
+  bottom: -10px;
+}
+
+.screen__image-popup {
+  position: relative;
+  list-style: none;
+  top: 90px;
+  height: 0;
+}
+
+.screen__image-dynamics {
+  max-width: 75vw;
+  max-height: 75vh;
+  position: relative;
+  object-fit: contain;
+}
+
+.screen__image_opened {
+  display: flex;
+  justify-content: center;
+  opacity: 1;
+  height: 100%;
+  transition: opacity 0.3s ease, height 0s ease;
+}
+
+.screen__image_closing {
+  animation: fadeOut 0.3s ease;
+}
+
+.screen__button-close-popup {
+  position: absolute;
+  right: -47px;
+  top: -47px;
+  background: url(../../images/Close_Icon.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+}
+
+.screen__button-close-popup:hover {
+  opacity: 0.8;
+  border-radius: 2px;
+}
+
+@media screen and (max-width: 588px) {
+  .screen__popup-title {
+    width: 240px;
+  }
+  .screen__button-close-popup {
+    width: 30px;
+    height: 30px;
+    right: -30px;
+    top: -36px;
+  }
+}

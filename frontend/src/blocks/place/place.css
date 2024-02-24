@@ -1,0 +1,129 @@
+.place {
+  max-width: 282px;
+  width: 100%;
+  position: relative;
+  list-style: none;
+}
+
+.place__title {
+  max-width: 246px;
+  height: 30px;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  margin-left: 25px;
+  color: #000000;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.place__like-number {
+  font-weight: 400;
+  margin-right: 18px;
+  font-size: 13px;
+  line-height: 15.73px;
+}
+
+.place__like {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.place__image {
+  max-width: 282px;
+  width: 100%;
+  height: 282px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px 10px 0 0;
+  object-fit: cover;
+}
+
+.place__data {
+  max-width: 282px;
+  width: 100%;
+  height: 79px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  background-color: white;
+  border-radius: 0 0 10px 10px;
+}
+
+.place__button-like_active {
+  background: url("../../images/button_Like_Able.png") center no-repeat;
+  background-size: contain;
+}
+
+.place__button-like {
+  background-color: rgba(0, 0, 0, 0);
+  background-size: 100%;
+  width: 21px;
+  height: 19px;
+  cursor: pointer;
+  border: none;
+  margin-right: 18px;
+}
+
+.place__button-like:hover {
+  opacity: 0.5;
+}
+
+.place__button-delete {
+  background-color: rgba(0, 0, 0, 0);
+  width: 18px;
+  height: 19px;
+  position: absolute;
+  right: 15px;
+  top: 18px;
+  cursor: pointer;
+  border: none;
+  visibility: hidden;
+}
+
+.place__button-delete:hover {
+  opacity: 0.8;
+}
+
+.place__button-delete_visible {
+  visibility: visible;
+}
+
+@media screen and (max-width: 768px) {
+  .place {
+    max-width: 347px;
+    height: 430px;
+  }
+  .place__title {
+    max-width: 347px;
+  }
+  .place__image {
+    max-width: 347px;
+    height: 347px;
+  }
+  .place__data {
+    max-width: 347px;
+  }
+}
+
+@media screen and (max-width: 588px) {
+  .place {
+    width: 282px;
+    height: 361px;
+  }
+  .place__title {
+    width: 282px;
+  }
+  .place__image {
+    max-width: 282px;
+    height: 282px;
+  }
+  .place__data {
+    width: 282px;
+    height: 73px;
+  }
+}
