@@ -24,7 +24,7 @@ function Register({ registerUser }) {
   }
 
   function validatePassword(passwordInput) {
-    const passwordRegex = /^.{6,}$/;
+    const passwordRegex = /^.{8,}$/;
     return passwordRegex.test(passwordInput);
   }
 
@@ -43,7 +43,7 @@ function Register({ registerUser }) {
       setPasswordError(
         value.trim() === "" || validatePassword(value)
           ? ""
-          : "a senha deve conter no mínimo 6 caracteres"
+          : "a senha deve conter no mínimo 8 caracteres"
       );
     }
   }
