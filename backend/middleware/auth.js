@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return res
       .status(403)
-      .send({ message: 'token não confere' });
+      .send({ message: 'Autorização necessária' });
   }
 
   const token = authorization.replace('Bearer ', '');
