@@ -15,7 +15,7 @@ router.get('/cards', async (req, res, next) => {
 
 router.post('/cards', createCard);
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:cardId', async (req, res) => {
   try {
     const idUser = req.user._id;
     const idCardDelete = req.params.id;
