@@ -7,7 +7,7 @@ module.exports = {
     const linkRegex = /^(https?:\/\/)[^\s/$.?#].[^\s]*$/;
     const isValidLink = link.match(linkRegex);
     if (!isValidLink) {
-      throw new CustomError(errors.message, 'ValidationError', 400);
+      throw new CustomError('message', 'ValidationError', 400);
     }
     const owner = req.user._id;
     const newCard = new Card({
