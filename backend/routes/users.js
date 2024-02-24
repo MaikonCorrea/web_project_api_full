@@ -4,7 +4,6 @@ const {
   listUsers, createUser, updateProfile, updateUserAvatar,
   userMe,
 } = require('../controllers/users');
-const CustomError = require('../errors/CustomError');
 
 router.get('/users', listUsers);
 
