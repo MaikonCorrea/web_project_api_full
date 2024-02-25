@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const { errors, celebrate, Joi } = require('celebrate');
 const NotFoundError = require('./errors/NotFaundError');
 
 const cardsRouter = require('./routes/cards');
@@ -19,8 +20,27 @@ connectDatabase();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', celebrate({
+  headers: Joi.object().keys({
+    accept: Joi.string().valid('application/json').required(),
+    'content-type': Joi.string().valid('application/json').required(),
+  }),
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(8),
+  }),
+}), login);
+
+app.post('/signup', celebrate({
+  headers: Joi.object().keys({
+    accept: Joi.string().valid('application/json').required(),
+    'content-type': Joi.string().valid('application/json').required(),
+  }),
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(8),
+  }),
+}), createUser);
 
 app.use(auth);
 app.use('/', cardsRouter);
@@ -30,6 +50,8 @@ app.use('/', (req, res, next) => {
   const notFoundError = new NotFoundError('Request was not found');
   return next(notFoundError);
 });
+
+app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;
