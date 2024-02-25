@@ -2,12 +2,11 @@ const jwtSecret = process.env.JWT_SECRET;
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { createHash } = require('../utils/hash');
-
-const CustomError = require('../errors/CustomError');
+const ValidationError = require('../errors/ValidationError ');
 
 module.exports = {
 
-  createUser: async (req, res) => {
+  createUser: async (req, res, next) => {
     const { body } = req;
     const {
       email,
@@ -28,7 +27,7 @@ module.exports = {
       const user = await newUser.save();
       res.status(201).json({ success: true, user });
     } catch (error) {
-      res.status(500).json({ success: false, message: 'Failed to create user', error: error.message });
+      next(error);
     }
   },
 
@@ -37,13 +36,14 @@ module.exports = {
     res.status(200).json({ users });
   },
 
-  userMe: async (req, res) => {
+  userMe: async (req, res, next) => {
     try {
       const { user } = req;
       const id = user._id;
       const userData = await User.findById(id).select('name about email avatar');
       if (!userData) {
-        return res.status(404).json({ message: 'Usuário não encontrado' });
+        const validationError = new ValidationError('User not found');
+        return next(validationError);
       }
       const {
         name, about, email, avatar,
@@ -52,11 +52,11 @@ module.exports = {
         name, about, email, avatar,
       });
     } catch (error) {
-      return res.status(500).json({ message: 'Ocorreu um erro ao processar a solicitação' });
+      next(error);
     }
   },
 
-  updateProfile: async (userId, updatedData) => {
+  updateProfile: async (userId, updatedData, next) => {
     const existingUser = await User.findById(userId);
     try {
       if ('name' in updatedData || 'about' in updatedData) {
@@ -68,22 +68,19 @@ module.exports = {
         const updatedUser = await existingUser.save();
         return updatedUser;
       }
-      throw new CustomError('Nenhum dado válido fornecido para atualização!', 'InvalidDataError', 400);
+      const validationError = new ValidationError('No valid data provided for update!');
+      return next(validationError);
     } catch (error) {
-      if (error.name === 'ValidationError') {
-        const field = Object.keys(error.errors)[0];
-        const { message } = error.errors[field];
-        throw new CustomError(message, 'ValidationError', 400);
-      }
-      throw error;
+      next(error);
     }
   },
 
-  updateUserAvatar: async (userId, updatedData) => {
+  updateUserAvatar: async (userId, updatedData, next) => {
     try {
       const existingUser = await User.findById(userId);
       if (!existingUser) {
-        throw new CustomError('Usuário não encontrado', 'NotFoundError', 404);
+        const validationError = new ValidationError('No valid data provided for update!');
+        return next(validationError);
       } if ('avatar' in updatedData) {
         const { avatar } = updatedData;
         existingUser.avatar = avatar;
@@ -92,24 +89,18 @@ module.exports = {
       const updatedUser = await existingUser.save();
       return updatedUser;
     } catch (error) {
-      if (error.name === 'ValidationError') {
-        const field = Object.keys(error.errors)[0];
-        const { message } = error.errors[field];
-        throw new CustomError(message, 'ValidationError', 400);
-      }
-      throw error;
+      next(error);
     }
   },
 
-  login: (req, res) => {
-    const { email, password } = req.body;
-    User.findUserByCredentials(email, password)
-      .then((user) => {
-        const token = jwt.sign({ _id: user._id }, jwtSecret, { expiresIn: '7d' });
-        res.send({ token });
-      })
-      .catch((err) => {
-        res.status(401).send({ message: err.message });
-      });
+  login: async (req, res, next) => {
+    try {
+      const { email, password } = req.body;
+      const user = await User.findUserByCredentials(email, password);
+      const token = jwt.sign({ _id: user._id }, jwtSecret, { expiresIn: '7d' });
+      res.send({ token });
+    } catch (error) {
+      next(error);
+    }
   },
 };

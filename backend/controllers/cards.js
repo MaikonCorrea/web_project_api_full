@@ -1,13 +1,14 @@
+const ValidationError = require('../errors/ValidationError ');
 const Card = require('../models/card');
-const CustomError = require('../errors/CustomError');
 
 module.exports = {
-  createCard: async (req, res) => {
+  createCard: async (req, res, next) => {
     const { name, link } = req.body;
     const linkRegex = /^(https?:\/\/)[^\s/$.?#].[^\s]*$/;
     const isValidLink = link.match(linkRegex);
     if (!isValidLink) {
-      throw new CustomError('message', 'ValidationError', 400);
+      const validationError = new ValidationError('Link entered is not valid');
+      return next(validationError);
     }
     const owner = req.user._id;
     const newCard = new Card({
@@ -20,12 +21,8 @@ module.exports = {
     try {
       const saveCard = await newCard.save();
       res.status(201).json(saveCard);
-    } catch (error) {
-      if (error instanceof CustomError) {
-        throw new CustomError(error.message, 'ValidationError', 400);
-      } else {
-        throw error;
-      }
+    } catch (err) {
+      next(err);
     }
   },
 
@@ -39,45 +36,37 @@ module.exports = {
     return deletedCard;
   },
 
-  likeCard: async (req, res) => {
+  likeCard: async (req, res, next) => {
     try {
       const { cardId } = req.params;
       const userId = req.user._id;
 
-      const updatedCard = await Card.findByIdAndUpdate(
+      await Card.findByIdAndUpdate(
         cardId,
         { $addToSet: { likes: userId } },
         { new: true },
       );
 
-      res.status(200).json(updatedCard);
+      res.status(200).json({ message: 'like card' });
     } catch (error) {
-      res.status(error.statusCode).json({
-        message: error.message,
-        type: error.name,
-        status: error.statusCode,
-      });
+      next(error);
     }
   },
 
-  unlikeCard: async (req, res) => {
+  unlikeCard: async (req, res, next) => {
     try {
       const { cardId } = req.params;
       const userId = req.user._id;
 
-      const updatedCard = await Card.findByIdAndUpdate(
+      await Card.findByIdAndUpdate(
         cardId,
         { $pull: { likes: userId } },
         { new: true },
       );
 
-      res.status(200).json(updatedCard);
+      res.status(200).json({ message: 'unlike card' });
     } catch (error) {
-      res.status(error.statusCode).json({
-        message: error.message,
-        type: error.name,
-        status: error.statusCode,
-      });
+      next(error);
     }
   },
 

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const NotFoundError = require('./errors/NotFaundError');
 
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
@@ -26,8 +27,19 @@ app.use('/', cardsRouter);
 app.use('/', usersRouter);
 
 app.use('/', (req, res, next) => {
-  res.status(404).json({ message: 'A solicitação não foi encontrada', status: 404 });
-  next();
+  const notFoundError = new NotFoundError('Request was not found');
+  return next(notFoundError);
+});
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({
+      message: statusCode === 500
+        ? 'A server error occurred'
+        : message,
+    });
 });
 
 app.listen(PORT, () => {

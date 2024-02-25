@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (v) => isEmail(v),
-      message: 'Formato do e-mail é inválido!',
+      message: 'Email format is invalid!',
     },
   },
   password: {
@@ -22,14 +22,14 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     default: 'Jacques Cousteau',
-    minlength: [2, 'O nome deve ter pelo menos 2 caracteres'],
-    maxlength: [30, 'O nome não pode ter mais de 30 caracteres'],
+    minlength: [2, 'The name must have at least 2 characters'],
+    maxlength: [30, 'The name cannot be longer than 30 characters'],
   },
   about: {
     type: String,
     default: 'Explorer',
-    minlength: [2, 'O campo about deve ter pelo menos 2 caracteres'],
-    maxlength: [30, 'O campo about não pode ter mais de 30 caracteres'],
+    minlength: [2, 'The name must have at least 2 characters'],
+    maxlength: [30, 'The name cannot be longer than 30 characters'],
   },
   avatar: {
     type: String,
@@ -43,12 +43,12 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Email ou Senha incorretos!'));
+        return Promise.reject(new Error('Incorrect Email or Password!'));
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Email ou senha incorretos!'));
+            return Promise.reject(new Error('Incorrect Email or Password!'));
           }
           return user;
         });

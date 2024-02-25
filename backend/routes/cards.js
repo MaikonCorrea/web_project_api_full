@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { UnauthorizedError, NotFoundError } = require('../errors/UnauthorizedError');
 
 const {
   listCards, createCard, deleteCard, likeCard, unlikeCard,
@@ -15,7 +16,7 @@ router.get('/cards', async (req, res, next) => {
 
 router.post('/cards', createCard);
 
-router.delete('/:cardId', async (req, res) => {
+router.delete('/:cardId', async (req, res, next) => {
   try {
     const idUser = req.user._id;
     const idCardDelete = req.params.id;
@@ -25,44 +26,34 @@ router.delete('/:cardId', async (req, res) => {
     const cardToDelete = cards.find((card) => card._id.toString() === idCardDelete);
 
     if (!cardToDelete) {
-      return res.status(404).json({ message: 'Cartão não encontrado' });
+      const notFoundError = new NotFoundError('Card not found');
+      return next(notFoundError);
     }
 
     if (cardToDelete.owner.toString() !== idUser) {
-      return res.status(403).json({ message: 'Você não tem permissão para excluir este cartão' });
+      const unauthorized = new UnauthorizedError('User is allowed to delete this card');
+      return next(unauthorized);
     }
     deleteCard(idCardDelete);
-    res.status(200).json({ message: 'Cartão excluído com sucesso' });
+    res.status(200).json({ message: 'Card deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao encontrar o cartão' });
+    next(error);
   }
 });
 
-router.put('/:cardId/likes', async (req, res) => {
+router.put('/:cardId/likes', async (req, res, next) => {
   try {
     await likeCard(req, res);
   } catch (error) {
-    res
-      .status(error.statusCode)
-      .json({
-        message: error.message,
-        type: error.name,
-        Status: error.statusCode,
-      });
+    next(error);
   }
 });
 
-router.delete('/:cardId/likes', async (req, res) => {
+router.delete('/:cardId/likes', async (req, res, next) => {
   try {
     await unlikeCard(req, res);
   } catch (error) {
-    res
-      .status(error.statusCode)
-      .json({
-        message: error.message,
-        type: error.name,
-        Status: error.statusCode,
-      });
+    next(error);
   }
 });
 
