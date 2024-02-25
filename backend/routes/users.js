@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const validateUrl = require('../utils/validateURL');
 
 const {
   listUsers, updateProfile, updateUserAvatar,
@@ -37,7 +38,7 @@ router.patch('/users/me/avatar', celebrate({
     authorization: Joi.string().required(),
   }).unknown(true),
   body: Joi.object().keys({
-    avatar: Joi.string().uri().required(),
+    avatar: Joi.string().required().custom(validateUrl),
   }),
 }), updateUserAvatar);
 
