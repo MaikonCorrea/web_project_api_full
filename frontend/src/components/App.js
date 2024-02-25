@@ -178,7 +178,7 @@ function App() {
   function handleUpdateUser(updatedUser) {
     renderLoading(true);
     clientAPI
-      .updateDescriptionPerfil(updatedUser)
+      .profileDescriptionUpdate(updatedUser)
       .then((res) => {
         setCurrentUser(res);
         setIsEditProfilePopupOpen(false);
@@ -194,7 +194,7 @@ function App() {
   function handleUpdateAvatar(onUpdateAvatar) {
     renderLoading(true);
     clientAPI
-      .getProfilePicture(onUpdateAvatar)
+      .avatarImageUpdate(onUpdateAvatar)
       .then((res) => {
         setCurrentUser(res);
         setIsEditAvatarPopupOpen(false);
