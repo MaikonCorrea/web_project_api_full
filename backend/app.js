@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { errors, celebrate, Joi } = require('celebrate');
 const NotFoundError = require('./errors/NotFaundError');
+const { requestLogger, errorLogger } = require('./middleware/logger');
 
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
@@ -16,6 +17,8 @@ const connectDatabase = require('./data/database');
 
 const app = express();
 connectDatabase();
+
+app.use(requestLogger);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -50,6 +53,8 @@ app.use('/', (req, res, next) => {
   const notFoundError = new NotFoundError('Request was not found');
   return next(notFoundError);
 });
+
+app.use(errorLogger);
 
 app.use(errors());
 
