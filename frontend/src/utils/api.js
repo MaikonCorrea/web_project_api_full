@@ -41,8 +41,15 @@
     });
   }
 
-  updateDescriptionPerfil(data) {
+  profileDescriptionUpdate(data) {
     return this._fetch("/users/me", {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    });
+  }
+  
+ avatarImageUpdate(data) {
+    return this._fetch(`/users/me/avatar`, {
       method: "PATCH",
       body: JSON.stringify(data),
     });
@@ -60,12 +67,6 @@
     return this._fetch(`/cards/likes/${idItem}`, { method: "PUT" });
   }
 
-  getProfilePicture(data) {
-    return this._fetch(`/users/me/avatar`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    });
-  }
 }
 
 export default new Api({
