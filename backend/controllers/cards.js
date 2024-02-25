@@ -1,4 +1,6 @@
-const ValidationError = require('../errors/ValidationError ');
+const ValidationError = require('../errors/ValidationError');
+const NotFoundError = require('../errors/NotFaundError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 const Card = require('../models/card');
 
 module.exports = {
@@ -26,27 +28,50 @@ module.exports = {
     }
   },
 
-  listCards: async () => {
-    const cards = await Card.find();
-    return cards;
+  listCards: async (req, res, next) => {
+    try {
+      const cards = await Card.find();
+      return res.status(200).json(cards);
+    } catch (error) {
+      next(error);
+    }
   },
 
-  deleteCard: async (id) => {
-    const deletedCard = await Card.findByIdAndDelete(id);
-    return deletedCard;
+  deleteCard: async (req, res, next) => {
+    try {
+      const idUser = req.user._id;
+      const idCardDelete = req.params.cardId;
+
+      const cards = await Card.find();
+
+      const cardToDelete = cards.find((card) => card._id.toString() === idCardDelete);
+
+      if (!cardToDelete) {
+        const notFoundError = new NotFoundError('Card not found');
+        return next(notFoundError);
+      }
+
+      if (cardToDelete.owner.toString() !== idUser) {
+        const unauthorized = new UnauthorizedError('User is not allowed to delete this card');
+        return next(unauthorized);
+      }
+
+      await Card.findByIdAndDelete(idCardDelete);
+      res.status(200).json({ message: 'Card deleted successfully' });
+    } catch (error) {
+      next(error);
+    }
   },
 
   likeCard: async (req, res, next) => {
     try {
       const { cardId } = req.params;
       const userId = req.user._id;
-
       await Card.findByIdAndUpdate(
         cardId,
         { $addToSet: { likes: userId } },
         { new: true },
       );
-
       res.status(200).json({ message: 'like card' });
     } catch (error) {
       next(error);
@@ -57,13 +82,11 @@ module.exports = {
     try {
       const { cardId } = req.params;
       const userId = req.user._id;
-
       await Card.findByIdAndUpdate(
         cardId,
         { $pull: { likes: userId } },
         { new: true },
       );
-
       res.status(200).json({ message: 'unlike card' });
     } catch (error) {
       next(error);

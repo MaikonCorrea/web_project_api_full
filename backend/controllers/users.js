@@ -2,7 +2,7 @@ const jwtSecret = process.env.JWT_SECRET;
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { createHash } = require('../utils/hash');
-const ValidationError = require('../errors/ValidationError ');
+const ValidationError = require('../errors/ValidationError');
 
 module.exports = {
 
@@ -56,9 +56,11 @@ module.exports = {
     }
   },
 
-  updateProfile: async (userId, updatedData, next) => {
-    const existingUser = await User.findById(userId);
+  updateProfile: async (req, res, next) => {
     try {
+      const { user } = req;
+      const updatedData = req.body;
+      const existingUser = await User.findById(user._id);
       if ('name' in updatedData || 'about' in updatedData) {
         if ('name' in updatedData) existingUser.name = updatedData.name;
         if ('about' in updatedData) existingUser.about = updatedData.about;
@@ -66,7 +68,7 @@ module.exports = {
         await existingUser.validate();
 
         const updatedUser = await existingUser.save();
-        return updatedUser;
+        return res.status(200).json(updatedUser);
       }
       const validationError = new ValidationError('No valid data provided for update!');
       return next(validationError);
@@ -75,9 +77,11 @@ module.exports = {
     }
   },
 
-  updateUserAvatar: async (userId, updatedData, next) => {
+  updateUserAvatar: async (req, res, next) => {
     try {
-      const existingUser = await User.findById(userId);
+      const { user } = req;
+      const updatedData = req.body;
+      const existingUser = await User.findById(user._id);
       if (!existingUser) {
         const validationError = new ValidationError('No valid data provided for update!');
         return next(validationError);
@@ -87,7 +91,7 @@ module.exports = {
       }
       await existingUser.validate();
       const updatedUser = await existingUser.save();
-      return updatedUser;
+      return res.status(200).json(updatedUser);
     } catch (error) {
       next(error);
     }
