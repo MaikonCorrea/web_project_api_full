@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const { errors, celebrate, Joi } = require('celebrate');
+const cors = require('cors');
 const NotFoundError = require('./errors/NotFaundError');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 
@@ -14,6 +15,7 @@ const auth = require('./middleware/auth');
 
 const { PORT = 3000 } = process.env;
 const connectDatabase = require('./data/database');
+const allowedOrigins = require('./middleware/allowedCors');
 
 const app = express();
 connectDatabase();
@@ -22,6 +24,7 @@ app.use(requestLogger);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors({ origin: allowedOrigins }));
 
 app.post('/signin', celebrate({
   headers: Joi.object().keys({
