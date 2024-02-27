@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const { errors, celebrate, Joi } = require('celebrate');
 const cors = require('cors');
+const { errors, celebrate, Joi } = require('celebrate');
 const NotFoundError = require('./errors/NotFaundError');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 
@@ -30,7 +30,7 @@ app.post('/signin', celebrate({
   headers: Joi.object().keys({
     accept: Joi.string().valid('application/json').required(),
     'content-type': Joi.string().valid('application/json').required(),
-  }),
+  }).unknown(true),
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
@@ -41,7 +41,7 @@ app.post('/signup', celebrate({
   headers: Joi.object().keys({
     accept: Joi.string().valid('application/json').required(),
     'content-type': Joi.string().valid('application/json').required(),
-  }),
+  }).unknown(true),
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
