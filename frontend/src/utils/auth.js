@@ -1,4 +1,5 @@
-const BASE_URL = "https://register.nomoreparties.co";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const token = localStorage.getItem('token');
 
 export const register = async ({ email, password }) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -17,6 +18,7 @@ export const authorize = async ({ email, password }) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ email, password }),
   });
@@ -28,7 +30,7 @@ export const checkToken = async (token) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   });
 };
