@@ -67,12 +67,12 @@ module.exports = {
     try {
       const { cardId } = req.params;
       const userId = req.user._id;
-      await Card.findByIdAndUpdate(
+      const updatedCard = await Card.findByIdAndUpdate(
         cardId,
         { $addToSet: { likes: userId } },
         { new: true },
       );
-      res.status(200).json({ message: 'like card' });
+      res.status(200).json(updatedCard);
     } catch (error) {
       next(error);
     }
@@ -82,12 +82,12 @@ module.exports = {
     try {
       const { cardId } = req.params;
       const userId = req.user._id;
-      await Card.findByIdAndUpdate(
+      const updatedCard = await Card.findByIdAndUpdate(
         cardId,
         { $pull: { likes: userId } },
         { new: true },
       );
-      res.status(200).json({ message: 'unlike card' });
+      res.status(200).json(updatedCard);
     } catch (error) {
       next(error);
     }
