@@ -47,27 +47,27 @@ function App() {
   useEffect(() => {
     clientAPI.getUsers().then((res) => {
       setCurrentUser(res);
+      setEmailUser(res.email)      
     });
   }, []);
-
+  
   useEffect(() => {
-    clientAPI.getCards().then((result) => {
-      setCards(result);
+    clientAPI.getCards().then((res) => {
+      setCards(res);
     });
   }, []);
 
   async function handleTokenCheck() {
-    if (localStorage.getItem("jwt")) {
-      const jwt = localStorage.getItem("jwt");
-      try {
-        const response = await auth.checkToken(jwt);
-        const { data } = await response.json();
-        setEmailUser(data.email);
+    try {
+      const response = await auth.checkToken();
+      if (response.status === 201) {
         setIsLoggedIn(true);
         history.push("/profile");
-      } catch (error) {
-        console.log("Error no check token jwt:", error);
+      } else {
+        console.log("O status da resposta não é 201:", response.status);
       }
+    } catch (error) {
+      console.log("Error no check token jwt:", error);
     }
   }
 
@@ -77,13 +77,6 @@ function App() {
 
   async function handleLogin(token) {
     setIsLoggedIn(true);
-    try {
-      const response = await auth.checkToken(token);
-      const { data } = await response.json();
-      setEmailUser(data.email);
-    } catch (error) {
-      console.log("erro em solicitar retorno do data", error);
-    }
   }
 
   async function registerUser(email, password) {
@@ -111,6 +104,7 @@ function App() {
   async function loginUser(email, password) {
     try {
       let response = await auth.authorize({ email, password });
+      setEmailUser(email)
       if (!response.ok) {
         handleInfoPopup(false);
         throw new Error("Credenciais inválidas");
@@ -208,7 +202,8 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((like) => like === currentUser._id);
+    console.log(isLiked)
     const apiMethod = isLiked ? "deleteLike" : "addLike";
     clientAPI[apiMethod](card._id)
       .then((updatedCard) => {
@@ -236,10 +231,10 @@ function App() {
       });
   }
 
-  function handleAddPlaceSubmit(handleAddPlaceSubmit) {
+  function handleAddPlaceSubmit(onAddPlaceSubmit) {
     renderLoading(true);
     clientAPI
-      .createCards(handleAddPlaceSubmit)
+      .createCards(onAddPlaceSubmit)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         setIsAddPlacePopupOpen(false);
