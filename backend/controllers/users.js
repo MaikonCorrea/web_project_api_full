@@ -40,16 +40,16 @@ module.exports = {
     try {
       const { user } = req;
       const id = user._id;
-      const userData = await User.findById(id).select('name about email avatar');
+      const userData = await User.findById(id).select('name about email avatar _id');
       if (!userData) {
         const validationError = new ValidationError('User not found');
         return next(validationError);
       }
       const {
-        name, about, email, avatar,
+        name, about, email, avatar, _id,
       } = userData;
       return res.status(201).json({
-        name, about, email, avatar,
+        name, about, email, avatar, _id,
       });
     } catch (error) {
       next(error);
