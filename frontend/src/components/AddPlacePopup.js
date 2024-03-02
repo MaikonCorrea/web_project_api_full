@@ -1,8 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 import DOMPurify from "dompurify";
-import CurrentUserContext from "../contexts/CurrentUserContext";
-
 
 function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit }) {
   const [title, setTitle] = useState("");
@@ -10,17 +8,14 @@ function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit }) {
   const [isTitleValid, setIsTitleValid] = useState(false);
   const [isImageUrlValid, setIsImageUrlValid] = useState(false);
   const isValueValid = isTitleValid && isImageUrlValid;
-  const currentUser = useContext(CurrentUserContext);
 
   const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
 
   function handleSubmit() {
     if (isTitleValid && isImageUrlValid) {
       onAddPlaceSubmit({
-        likes: [],
         name: DOMPurify.sanitize(title),
         link: imageUrl,
-        owner: currentUser._id,
       });
     }
   }
