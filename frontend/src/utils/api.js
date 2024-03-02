@@ -1,16 +1,15 @@
-const BASE_URL =  process.env.REACT_APP_BASE_URL;
-
  export class Api {
   constructor({ baseUrl, token }) {
     this._baseUrl = baseUrl;
     this._token = token;
   }
+  
 
   _fetch(url, options) {
     const fullUrl = `${this._baseUrl}${url}`;
     const headers = {
       "Content-Type": "application/json",
-      authorization: this._token,
+      authorization: `Bearer ${this._token}`,
     };
 
     const mergedOptions = { headers, ...options };
@@ -30,6 +29,7 @@ const BASE_URL =  process.env.REACT_APP_BASE_URL;
 
   getUsers() {
     return this._fetch("/users/me", { method: "GET" });
+    
   }
 
   getCards() {
@@ -72,8 +72,9 @@ const BASE_URL =  process.env.REACT_APP_BASE_URL;
 }
 
 export default new Api({
-  baseUrl: BASE_URL,
-  token: localStorage.getItem('token')
+  baseUrl: process.env.REACT_APP_BASE_URL,
+  token: localStorage.getItem('jwt'),
 });
+
 
 

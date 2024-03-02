@@ -22,7 +22,7 @@ function Login({ loginUser }) {
   }
 
   function validatePassword(passwordInput) {
-    const passwordRegex = /^.{6,}$/;
+    const passwordRegex = /^.{8,}$/;
     return passwordRegex.test(passwordInput);
   }
 

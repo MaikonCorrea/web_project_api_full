@@ -14,7 +14,7 @@ export default function Main({
   onCardDelete,
 }) {
   const currentUser = React.useContext(CurrentUserContext);
-  const hasCards = Boolean(cards.length);
+  const hasCards = cards && cards.length > 0;
 
   return (
     <>

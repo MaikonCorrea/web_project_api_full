@@ -11,6 +11,7 @@
   "author": "Maikon Corrêa",
   "license": "ISC",
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.0",
