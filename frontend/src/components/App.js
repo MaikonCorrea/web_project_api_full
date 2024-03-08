@@ -39,27 +39,24 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [emailUser, setEmailUser] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("jwt"));
 
   useEffect(() => {
-    handleTokenCheck();
-  }, []);
-
-  useEffect(() => {
-    clientAPI.getUsers().then((res) => {
-      setCurrentUser(res);
-      setEmailUser(res.email)      
-    });
-  }, []);
-  
-  useEffect(() => {
-    clientAPI.getCards().then((res) => {
-      setCards(res);
-    });
+    if (token !== null) {
+      clientAPI.getUsers().then((users) => {
+        setCurrentUser(users);
+        setEmailUser(users.email);
+      });
+      clientAPI.getCards().then((cards) => {
+        setCards(cards);
+      });
+      handleTokenCheck();
+    }
   }, []);
 
   async function handleTokenCheck() {
     try {
-      const response = await auth.checkToken();
+      const response = await auth.checkToken(token);
       if (response.status === 201) {
         setIsLoggedIn(true);
         history.push("/profile");
@@ -75,8 +72,15 @@ function App() {
     setIsLoggedIn(false);
   }
 
-  async function handleLogin(token) {
+  function handleLogin() {
     setIsLoggedIn(true);
+    clientAPI.getCards(localStorage.getItem("jwt")).then((cards) => {
+      setCards(cards);
+    });
+    clientAPI.getUsers(localStorage.getItem("jwt")).then((users) => {
+      setCurrentUser(users);
+      setEmailUser(users.email);
+    });
   }
 
   async function registerUser(email, password) {
@@ -87,13 +91,19 @@ function App() {
         history.push("/login");
       } else {
         handleInfoPopup(false);
-  
+
         if (response.status === 400) {
-          console.log("Um dos campos foi preenchido incorretamente:", response.status);
+          console.log(
+            "Um dos campos foi preenchido incorretamente:",
+            response.status
+          );
         } else if (response.status === 401) {
           alert("Não autorizado: Verifique suas credenciais.", response.status);
         } else {
-          console.log("Erro desconhecido ao tentar registrar:", response.status);
+          console.log(
+            "Erro desconhecido ao tentar registrar:",
+            response.status
+          );
         }
       }
     } catch (error) {
@@ -104,22 +114,22 @@ function App() {
   async function loginUser(email, password) {
     try {
       let response = await auth.authorize({ email, password });
-      setEmailUser(email)
       if (!response.ok) {
         handleInfoPopup(false);
         throw new Error("Credenciais inválidas");
       }
-  
       response = await response.json();
       if (response.token) {
         const expirationTimeInHours = 24;
-        const expirationTimeInMilliseconds = expirationTimeInHours * 60 * 60 * 1000;
+        const expirationTimeInMilliseconds =
+          expirationTimeInHours * 60 * 60 * 1000;
         const token = response.token;
         localStorage.setItem("jwt", token);
-        handleLogin(token);
+        handleLogin();
         setTimeout(() => {
           localStorage.removeItem("jwt");
           handleLogout();
+          setToken(null);
           history.push("/login");
         }, expirationTimeInMilliseconds);
         history.push("/profile");
@@ -172,7 +182,7 @@ function App() {
   function handleUpdateUser(updatedUser) {
     renderLoading(true);
     clientAPI
-      .profileDescriptionUpdate(updatedUser)
+      .profileDescriptionUpdate(updatedUser, localStorage.getItem('jwt'))
       .then((res) => {
         setCurrentUser(res);
         setIsEditProfilePopupOpen(false);
@@ -188,7 +198,7 @@ function App() {
   function handleUpdateAvatar(onUpdateAvatar) {
     renderLoading(true);
     clientAPI
-      .avatarImageUpdate(onUpdateAvatar)
+      .avatarImageUpdate(onUpdateAvatar, localStorage.getItem('jwt'))
       .then((res) => {
         setCurrentUser(res);
         setIsEditAvatarPopupOpen(false);
@@ -205,8 +215,9 @@ function App() {
     const isLiked = card.likes.some((like) => like === currentUser._id);
     console.log(isLiked)
     const apiMethod = isLiked ? "deleteLike" : "addLike";
-    clientAPI[apiMethod](card._id)
+    clientAPI[apiMethod](card._id, localStorage.getItem('jwt'))
       .then((updatedCard) => {
+        console.log(updatedCard)
         const updatedCards = cards.map((c) =>
           c._id === updatedCard._id ? updatedCard : c
         );
@@ -220,7 +231,7 @@ function App() {
   function handleCardDelete() {
     renderLoading(true);
     clientAPI
-      .deleteCard(cardToDelete._id)
+      .deleteCard(cardToDelete._id, localStorage.getItem('jwt'))
       .then(() => {
         const updatedCards = cards.filter((c) => c._id !== cardToDelete._id);
         setCards(updatedCards);
@@ -234,7 +245,7 @@ function App() {
   function handleAddPlaceSubmit(onAddPlaceSubmit) {
     renderLoading(true);
     clientAPI
-      .createCards(onAddPlaceSubmit)
+      .createCards(onAddPlaceSubmit, localStorage.getItem('jwt'))
       .then((newCard) => {
         setCards([newCard, ...cards]);
         setIsAddPlacePopupOpen(false);

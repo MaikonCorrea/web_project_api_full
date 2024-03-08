@@ -5,15 +5,14 @@
   }
   
 
-  _fetch(url, options) {
+  _fetch(url, options, token = this._token) {
     const fullUrl = `${this._baseUrl}${url}`;
     const headers = {
       "Content-Type": "application/json",
-      authorization: `Bearer ${this._token}`,
+      authorization: `Bearer ${token || this._token}`,
     };
 
     const mergedOptions = { headers, ...options };
-
     return fetch(fullUrl, mergedOptions)
       .then((res) => {
         if (res.ok) {
@@ -27,46 +26,46 @@
       });
   }
 
-  getUsers() {
-    return this._fetch("/users/me", { method: "GET" });
+  getUsers(token) {
+    return this._fetch("/users/me", { method: "GET" }, token);
     
   }
 
-  getCards() {
-    return this._fetch("/cards", { method: "GET" });
+  getCards(token) {
+    return this._fetch("/cards", { method: "GET" }, token );
   }
 
-  createCards(data) {
+  createCards(data, token) {
     return this._fetch("/cards", {
       method: "POST",
       body: JSON.stringify(data),
-    });
+    }, token);
   }
 
-  profileDescriptionUpdate(data) {
+  profileDescriptionUpdate(data, token) {
     return this._fetch("/users/me", {
       method: "PATCH",
       body: JSON.stringify(data),
-    });
+    }, token);
   }
   
- avatarImageUpdate(data) {
+ avatarImageUpdate(data, token) {
     return this._fetch(`/users/me/avatar`, {
       method: "PATCH",
       body: JSON.stringify(data),
-    });
+    }, token);
   }
 
-  deleteCard(idItem) {
-    return this._fetch(`/cards/${idItem}`, { method: "DELETE" });
+  deleteCard(idItem, token) {
+    return this._fetch(`/cards/${idItem}`, { method: "DELETE" }, token);
   }
 
-  deleteLike(idItem) {
-    return this._fetch(`/cards/likes/${idItem}`, { method: "DELETE" });
+  deleteLike(idItem, token) {
+    return this._fetch(`/cards/likes/${idItem}`, { method: "DELETE" }, token);
   }
 
-  addLike(idItem) {
-    return this._fetch(`/cards/likes/${idItem}`, { method: "PUT" });
+  addLike(idItem, token) {
+    return this._fetch(`/cards/likes/${idItem}`, { method: "PUT" }, token);
   }
 
 }
