@@ -12,13 +12,11 @@ export const register = async ({ email, password }) => {
 };
 
 export const authorize = async ({ email, password }) => {
-  const token = localStorage.getItem('jwt');
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ email, password }),
   });
