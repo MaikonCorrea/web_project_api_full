@@ -73,11 +73,12 @@ function App() {
   }
 
   function handleLogin() {
+    const token = localStorage.getItem('jwt');
     setIsLoggedIn(true);
-    clientAPI.getCards(localStorage.getItem("jwt")).then((cards) => {
+    clientAPI.getCards(token).then((cards) => {
       setCards(cards);
     });
-    clientAPI.getUsers(localStorage.getItem("jwt")).then((users) => {
+    clientAPI.getUsers(token).then((users) => {
       setCurrentUser(users);
       setEmailUser(users.email);
     });
