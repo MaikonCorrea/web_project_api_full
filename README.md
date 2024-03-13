@@ -2,6 +2,34 @@
 
 Este projeto consiste em uma aplicação completa com backend em Node.js e frontend em React. O backend fornece uma API RESTful para interagir com um banco de dados MongoDB. O frontend é uma aplicação React que consome esta API.
 
+### Veja como ficou meu projeto clicando [aqui](https://www.maikoncorreaaround.mooo.com).
+
+
+## Screenshots
+
+Aqui estão alguns screenshots do meu projeto:
+
+<img src="https://github.com/MaikonCorrea/web_project_api_full/assets/121962633/3a6fbf2a-079f-4a71-87db-994acb469f42" width="150" height="150">
+
+<img src="https://github.com/MaikonCorrea/web_project_api_full/assets/121962633/58eb39aa-3aaa-45f0-8a3b-a2b7f81f4f86" width="150" height="150">
+
+<img src="https://github.com/MaikonCorrea/web_project_api_full/assets/121962633/983fc857-8454-4c2a-8d58-7fc06bba3b4a" width="150" height="150">
+
+<img src="https://github.com/MaikonCorrea/web_project_api_full/assets/121962633/db8239ac-8d02-480d-b2c3-899966816432" width="150" height="150">
+
+<img src="https://github.com/MaikonCorrea/web_project_api_full/assets/121962633/db49a2bf-33b2-4c2c-95e1-e36dd7b07131" width="150" height="150">
+
+<img src="https://github.com/MaikonCorrea/web_project_api_full/assets/121962633/826c6f05-1ec4-4c29-8c84-835714d8084b" width="150" height="150">
+
+<img src="https://github.com/MaikonCorrea/web_project_api_full/assets/121962633/84150343-136a-4725-abc9-6931ba9a4cf8" width="150" height="150">
+
+
+
+
+
+
+
+
 ## Configuração do Ambiente
 
 ### Pré-requisitos
@@ -25,14 +53,32 @@ Este projeto consiste em uma aplicação completa com backend em Node.js e front
 npm install
 ### Execução em Ambiente de Desenvolvimento
 
-```bash
 npm run dev
 ### Execução em Ambiente de Produção
 
-```bash
 npm start
 
-```` 
+````
+
+### Dependências
+- Express.js: Framework web para Node.js
+- Mongoose: ODM (Object Data Modeling) para MongoDB
+- Joi: Validação de dados
+- JSON Web Token: Implementação de autenticação via tokens JWT
+- Outras dependências estão listadas no arquivo package.json
+
+## Frontend
+
+### Instalação
+
+```bash
+npm install
+
+npm start
+
+npm run build
+````
+
 
 ### Dependências
 
