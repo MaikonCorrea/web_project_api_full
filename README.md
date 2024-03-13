@@ -96,25 +96,4 @@ O deploy do frontend pode ser realizado utilizando o script `deploy` definido no
 npm run deploy
 ````
 
-
-Entendi, aqui está o README com a seção "Licença" movida para baixo das Dependências em Markdown:
-
-markdown
-Copy code
-### Dependências
-
-- React: Biblioteca para construção de interfaces de usuário
-- React Router DOM: Gerenciamento de rotas para aplicativos React
-- Jest e React Testing Library: Ferramentas de teste
-- Outras dependências estão listadas no arquivo `package.json`
-
-## Deploy
-
-O deploy do frontend pode ser realizado utilizando o script `deploy` definido no arquivo `package.json`. Certifique-se de substituir `<user>` e `<host>` pelo seu usuário e endereço IP da VM.
-
-```bash
-npm run deploy
-
-```
-
 Este README fornece uma visão geral do projeto, incluindo instruções de configuração, execução e deploy. Certifique-se de adaptar as instruções conforme necessário para o seu ambiente específico.
