@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { createHash } = require('../utils/hash');
 const ValidationError = require('../errors/ValidationError');
+const ConflictError = require('../errors/ConflictError');
 
 module.exports = {
 
@@ -15,6 +16,11 @@ module.exports = {
       about,
       avatar,
     } = body;
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      const conflict = new ConflictError('User already exists');
+      throw conflict;
+    }
     const hashedPassword = createHash(password);
     const newUser = new User({
       email,
