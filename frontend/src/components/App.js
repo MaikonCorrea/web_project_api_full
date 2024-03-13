@@ -108,7 +108,7 @@ function App() {
         }
       }
     } catch (error) {
-      console.error("Erro no registro:", error.message);
+      console.error("Ocorreu um erro no servidor", error.message);
     }
   }
 
@@ -214,13 +214,11 @@ function App() {
 
   function handleCardLike(card) {
     const isLiked = card.likes.some((like) => like === currentUser._id);
-    console.log(isLiked)
     const apiMethod = isLiked ? "deleteLike" : "addLike";
     clientAPI[apiMethod](card._id, localStorage.getItem('jwt'))
       .then((updatedCard) => {
-        console.log(updatedCard)
         const updatedCards = cards.map((c) =>
-          c._id === updatedCard._id ? updatedCard : c
+            c._id === updatedCard._id ? updatedCard : c
         );
         setCards(updatedCards);
       })
