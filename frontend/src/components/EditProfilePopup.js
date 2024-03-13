@@ -20,13 +20,13 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   function handleNameChange(e) {
     const newName = e.target.value;
     setName(newName);
-    setIsNameValid(newName.length >= 2);
+    setIsNameValid(newName.length >= 2 && newName.length <= 30);
   };
 
   function handleDescriptionChange(e) {
     const newDescription = e.target.value;
     setDescription(newDescription);
-    setIsDescriptionValid(newDescription.length >= 2);
+    setIsDescriptionValid(newDescription.length >= 2 && newDescription.length <= 200);  
   };
 
   function escapeHTML(text) {
@@ -58,10 +58,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         placeholder="Nome"
         value={name}
         onChange={handleNameChange}
-        maxLength={40}
+        maxLength={30}
       />
       <span className="span span_name-message">
-        {!isNameValid && "O nome deve mais de 2 caracteres"}
+      {!isNameValid && "O nome deve conter mais de 2 e menos de 30 caracteres"}
       </span>
       <input
         className="edit__input-about"
@@ -73,7 +73,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         maxLength={200}
       />
       <span className="span span_about-message">
-        {!isDescriptionValid && "A descrição deve conter mais de 2 caracteres"}
+        {!isDescriptionValid && "A descrição deve conter mais de 2  e menos de 200 caracteres"}
       </span>
     </PopupWithForm>
   );

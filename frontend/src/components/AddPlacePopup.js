@@ -23,7 +23,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit }) {
   function handleTitleChange(e) {
     const newTitle = e.target.value;
     setTitle(newTitle);
-    setIsTitleValid(newTitle.length >= 2);
+    setIsTitleValid(newTitle.length >= 2 && newTitle.length <= 30);
   }
 
   function handleImageUrlChange(e) {
@@ -54,7 +54,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit }) {
         value={title}
       />
       <span className={`span span_name-message`}>
-        {!isTitleValid && "O título deve ter no mínimo 2 caracteres"}
+        {!isTitleValid && "O título deve ter mais de 02 e menos de 30 caracteres"}
       </span>
       <input
         className={`include__input-link input ${
