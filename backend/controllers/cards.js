@@ -1,6 +1,6 @@
 const ValidationError = require('../errors/ValidationError');
 const NotFoundError = require('../errors/NotFaundError');
-const UnauthorizedError = require('../errors/UnauthorizedError');
+const ForbiddenError = require('../errors/ForbiddenError');
 const Card = require('../models/card');
 
 module.exports = {
@@ -21,8 +21,10 @@ module.exports = {
     });
 
     try {
-      const saveCard = await newCard.save();
-      res.status(201).json(saveCard);
+      const savedCard = await newCard.save();
+      const cards = await Card.find();
+      cards.unshift(savedCard);
+      res.status(201).json(savedCard);
     } catch (err) {
       next(err);
     }
@@ -30,7 +32,7 @@ module.exports = {
 
   listCards: async (req, res, next) => {
     try {
-      const cards = await Card.find();
+      const cards = await Card.find().sort({ createdAt: -1 });
       return res.status(200).json(cards);
     } catch (error) {
       next(error);
@@ -52,8 +54,8 @@ module.exports = {
       }
 
       if (cardToDelete.owner.toString() !== idUser) {
-        const unauthorized = new UnauthorizedError('User is not allowed to delete this card');
-        return next(unauthorized);
+        const Forbidden = new ForbiddenError('User is not allowed to delete this card');
+        throw Forbidden;
       }
 
       await Card.findByIdAndDelete(idCardDelete);
