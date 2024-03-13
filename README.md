@@ -2,7 +2,8 @@
 
 Este projeto consiste em uma aplicação completa com backend em Node.js e frontend em React. O backend fornece uma API RESTful para interagir com um banco de dados MongoDB. O frontend é uma aplicação React que consome esta API.
 
-### Veja como ficou meu projeto clicando [aqui](https://www.maikoncorreaaround.mooo.com).
+### Veja como ficou meu projeto clicando [aqui](https://www.maikoncorreaaround.mooo.com){:target="_blank"}.
+
 
 
 ## Screenshots
