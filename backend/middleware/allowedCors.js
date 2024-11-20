@@ -1,7 +1,5 @@
 const allowedOrigins = [
-  'https//maikoncorreaaround.mooo.com',
-  'http://maikoncorreaaround.mooo.com',
-  'http://localhost:3000',
+  'http://localhost:3001',
 ];
 
 module.exports = allowedOrigins;
