@@ -70,10 +70,12 @@
 
 }
 
-export default new Api({
+const apiInstance = new Api({
   baseUrl: process.env.REACT_APP_BASE_URL,
   token: localStorage.getItem('jwt'),
 });
+
+export default apiInstance;
 
 
 

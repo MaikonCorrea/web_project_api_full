@@ -6,8 +6,7 @@
   "scripts": {
     "lint": "eslint --fix .",
     "start": "node app.js",
-    "dev": "nodemon app.js",
-    "update": "npm update"
+    "dev": "nodemon app.js"
   },
   "author": "Maikon Corrêa",
   "license": "ISC",
