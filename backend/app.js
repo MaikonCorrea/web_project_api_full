@@ -26,12 +26,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors({ origin: allowedOrigins }));
 
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('O servidor travará agora');
-  }, 0);
-});
-
 app.post('/signin', celebrate({
   headers: Joi.object().keys({
     accept: Joi.string().valid('application/json').required(),
