@@ -13,7 +13,7 @@ const {
 } = require('./controllers/users');
 const auth = require('./middleware/auth');
 
-const { PORT = 3000 } = process.env;
+//const { PORT = 3000 } = process.env;
 const connectDatabase = require('./data/database');
 const allowedOrigins = require('./middleware/allowedCors');
 
@@ -72,6 +72,4 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port: ${PORT}`);
-});
+module.exports = app;
