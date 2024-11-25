@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "engine": {
+    "node": ">=22.11.0"
+  },
   "scripts": {
     "lint": "eslint --fix .",
     "start": "node app.js",
