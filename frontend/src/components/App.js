@@ -40,8 +40,22 @@ function App() {
   const [emailUser, setEmailUser] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("jwt"));
-
+  
   useEffect(() => {
+    async function handleTokenCheck() {
+      try {
+        const response = await auth.checkToken(token);
+        if (response.status === 201) {
+          setIsLoggedIn(true);
+          history.push("/profile");
+        } else {
+          console.log("O status da resposta não é 201:", response.status);
+        }
+      } catch (error) {
+        console.log("Error no check token jwt:", error);
+      }
+    }
+
     if (token !== null) {
       clientAPI.getUsers().then((users) => {
         setCurrentUser(users);
@@ -52,21 +66,7 @@ function App() {
       });
       handleTokenCheck();
     }
-  }, []);
-
-  async function handleTokenCheck() {
-    try {
-      const response = await auth.checkToken(token);
-      if (response.status === 201) {
-        setIsLoggedIn(true);
-        history.push("/profile");
-      } else {
-        console.log("O status da resposta não é 201:", response.status);
-      }
-    } catch (error) {
-      console.log("Error no check token jwt:", error);
-    }
-  }
+  }, [token]);
 
   function handleLogout() {
     setIsLoggedIn(false);
