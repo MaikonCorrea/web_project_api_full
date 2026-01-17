@@ -72,6 +72,10 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}`);
+  });
+}
+
+module.exports = app;
