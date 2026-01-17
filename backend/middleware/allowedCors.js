@@ -1,5 +1,5 @@
 const allowedOrigins = [
-  'https://web-project-api-full-i2qpd1y8g-maikoncorreas-projects.vercel.app/',
+  'https://aroundusfrontend.vercel.app',
   'http://localhost:3001',
 ];
 
